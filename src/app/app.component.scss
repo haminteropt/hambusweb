@@ -1,0 +1,38 @@
+.header {
+    grid-area: header;
+    
+    background-color: rgb(143, 44, 8);
+}
+.left-side {
+    grid-area: left-side;
+    background-color: yellow;
+}
+.heading {
+    justify-content: center;
+}
+.left-menu {
+    list-style: none;
+}
+.content {
+    grid-area: content;
+    background-color: chocolate;
+}
+.right-side {
+    grid-area: right-side;
+    background-color: cornflowerblue;
+}
+.footer {
+    grid-area: footer;
+    background-color: aqua;
+}
+
+.wrapper {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 1fr 4fr 1fr;
+  
+    grid-template-areas:
+    "header         header      header"
+    "left-side      content     right-side" 
+    "footer         footer      footer" ;
+}
