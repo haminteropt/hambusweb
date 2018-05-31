@@ -7,18 +7,27 @@ import {
   MatAutocompleteModule, MatToolbarModule, MatIconModule, MatMenuModule,
   MatCheckboxModule, MatButtonModule, MatStepperModule, MatDivider, MatDividerModule, MatCardActions
 } from '@angular/material';
-
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { appRoutes } from './app.routes';
+import { RigBusComponent } from './components/rig-bus/rig-bus.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    RigBusComponent
   ],
   imports: [
     BrowserModule,
-    MatCardModule
+    MatCardModule,
+    RouterModule,
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
