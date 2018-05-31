@@ -5,30 +5,33 @@
 }
 .left-side {
     grid-area: left-side;
-    background-color: yellow;
+    background-color: wheat;
 }
 .heading {
     justify-content: center;
+    color: white;
+    background-color: darkblue;
 }
 .left-menu {
     list-style: none;
+
 }
 .content {
     grid-area: content;
-    background-color: chocolate;
+    color: black;
+    background-color: White;
 }
 .right-side {
     grid-area: right-side;
-    background-color: cornflowerblue;
+    background-color: wheat;
 }
 .footer {
     grid-area: footer;
-    background-color: aqua;
+    background-color: wheat;
 }
 
 .wrapper {
     display: grid;
-    grid-gap: 15px;
     grid-template-columns: 1fr 4fr 1fr;
   
     grid-template-areas:
