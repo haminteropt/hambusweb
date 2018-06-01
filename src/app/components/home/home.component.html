@@ -1,6 +1,66 @@
-
-<h3>Mission Statement:</h3>  
-<p>
-Create a suite of libraries, services and applications that allow 
-different Amateur Radio hardware and software to interoperate seemlessly.
+<h3>
+  Mission Statement:</h3>
+<p>Create a suite of libraries, services and applications that allow different Amateur Radio hardware and software to interoperate
+  seamlessly.
 </p>
+<h3>Goals:</h3>
+<p>Let any computer, any OS, any language, anywhere inter operaterate with each other.</p>
+
+So this year I have started a project called “HamBus”. The purpose of this project is to 
+create working copies of 4 Amateur Radio Web servers:
+<ul>
+  <li>RigGate – a server to control one or more radios. This is the flagship service and should be usable by press time</li>
+  <li>LogGate – a server to log QSO into a database.</li>
+  <li>DXClusterGate – DX Cluster server with push notification using Microsoft SignalR service.</li>
+  <li>BeaconGate – Provide a cloud location for Reverse Beacon Reports.</li>
+</ul>
+
+<p>At the time of writing all except RigGate haven’t been started. I thought that RigGate would be the easiest to write. I am
+fairly sure I was incorrect. ;-) </p>
+
+<p>
+
+My plan is to OmniRig and HamLib for RigGate until a native code can be written, but not sure how
+much else I can put into it. Being that it is open source I am open to others to contribute to the project. These services
+and projects are not a replacement for logbook programs, but are to provide a powerful, easy flexible framework for all Amateur
+Radio application. The StarGate takes care of a lot of hard and dull parts of building an application, so developers don’t
+have to reinvent the wheel. Benefits Amateur Radio Operator This will mean that every application that uses the service will
+cooperate together.
+</p>
+<h4> For example: </h4>
+<ul>
+  <li>Digital software can log contacts to the same database as the logging application.</li>
+  <li>Cluster applications, logging applications, digital applications, and even web browser applications can talk to the radio
+    at the same time.</li>
+  <li>The server and the client don’t have to be on the same computer or even in the same country.</li>
+  <li>The server will be backwards compatible with older versions of the client.</li>
+  <li>A single click will log your contacts to one or more servers. No more exporting an ADIF file on one logbook app and importing
+    it from another.</li>
+  <li>More than one user and/or one computer could be logging to the same database at the same time. This would be great for
+    multi-Op contests like Field Day.</li>
+  <li>Applications are no longer required to be desktop applications. There can, and will be, browser logbook programs that can
+    control the radio and log to the same database as a desktop application.</li>
+  <li>Upgrade friendly. Servers will be backward compatible with older versions of applications.</li>
+</ul>
+<p>
+  Version support is really important. Here is why: Let’ say you like Acme PSK that uses LogGate V1, however you upgrade to
+  the latest version of WizBang logger which wants V3.1 of LogGate. Since the latest version of LogGate will support V1-V4
+  everyone will be happy. There still could be a version problem if say QSL-Me.com writes their web services and doesn’t
+  write previous version services, then it won’t work. This isn’t expected to be a problem since the software is open source
+  under the Apache license anyone could take the server source code and make proprietary changes without the legal requirement
+  of sharing their source code.
+</p>
+
+<h3>Application developer </h3>
+<ul>
+  <li> This means you can spend more time on the features that is important to your users and less time reinventing the wheel.
+    </li>
+  <li> Your applications will work hand in hand with others using the same gateways regardless of language or operating system.
+    </li>
+  <li> Making connections to databases, clusters, radios </li>
+  <li> Installs become a lot easier since you don’t have to worry about database locations, drivers, etc. </li>
+  <li> Each server should have an URI which will display usage of the services. </li>
+  <li> Source code for all the StarGate projects will be hosted on GitHub.com </li>
+  <li> Versioning reduces the pressure to upgrade your application because a new StarGate server has been released. You users
+    can upgrade that StarGate server without fearing it will break your application.</li>
+  </ul>
