@@ -12,9 +12,22 @@
     color: white;
     background-color: darkblue;
 }
-.left-menu {
+.card-title {
+    font-size: 1.5em;
+    margin-top: -20px;
+    font-weight: bold;
+    background-color: wheat;
+    justify-self: center;
+}
+.menu {
     list-style: none;
-
+}
+a {
+    text-decoration: none;
+}
+ul {
+    list-style-position: inside;
+    padding-left: 10px;
 }
 .content {
     grid-area: content;
@@ -29,6 +42,10 @@
     grid-area: footer;
     background-color: wheat;
 }
+.news {
+    grid-area: news;
+    background-color: wheat;
+}
 
 .wrapper {
     display: grid;
@@ -36,6 +53,7 @@
   
     grid-template-areas:
     "header         header      header"
+    "news           news        news"
     "left-side      content     right-side" 
     "footer         footer      footer" ;
 }

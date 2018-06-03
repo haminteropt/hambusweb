@@ -1,31 +1,53 @@
-
-  <div class="wrapper">
-    <div class="header">
-      <mat-card class="heading">
-      <h1  >Welcome to Amateur Radio InterOpt Foundation!</h1>
+<div class="wrapper">
+  <div class="header">
+    <mat-card class="heading">
+      <h1>Welcome to Amateur Radio InterOpt Foundation!</h1>
     </mat-card>
 
-    </div>
-    <mat-card class="left-side">
-      <ul class="left-menu">
-          <li><a routerLink="/home">Home</a></li>
-        <li><a routerLink="/rigBus">Rig Bus</a></li>
-        <li>DataBase Bus</li>
-        <li>Logging Bus</li>
-        <li>DX Cluster Bus</li>
-        <li>Rig Bus</li>
-      </ul>
-
-    </mat-card>
-    <mat-card class="content">
-        <router-outlet></router-outlet>
-    </mat-card>
-    <mat-card class="right-side">
-        right
-    </mat-card>
-    <mat-card class="footer">
-        Copyright (c) 2018 Amateur Radio InterOpt Foundation
-    </mat-card>
   </div>
+  <mat-card class="news">
+    <mat-card-title class="card-title">HamBus News</mat-card-title>
+    This site is work in progress. Just wanted something up to say we are here and moving forward.
+  </mat-card>
+  <mat-card class="left-side">
+    <a routerLink="/home">Home</a>
+    <h2>Buses</h2>
+    <ul class="menu">
+      <li>
 
+      </li>
+      <li>
+        <a routerLink="/rigBus">Rig Bus</a>
+      </li>
+      <li>DataBase Bus</li>
+      <li>Logging Bus</li>
+      <li>DX Cluster Bus</li>
+      <li>Rig Bus</li>
+    </ul>
+    <h2>Servers</h2>
+    <h2>Clients</h2>
+  </mat-card>
+  <mat-card class="content">
+    <router-outlet></router-outlet>
+  </mat-card>
+  <mat-card class="right-side">
+    <mat-card-title>
+      Developers Corner
+      <ul class="menu">
+          <li>
+              <a routerLink="/join">Join</a>
+          </li>
+          <li>
+              <a routerLink="/swagger">Swagger</a>
+          </li>
+          <li>
+            <a routerLink="/busstandards">Bus Standards</a>
+          </li>
 
+        </ul>
+    </mat-card-title>
+  </mat-card>
+  <mat-card class="footer">
+    Copyright (c) 2018 Amateur Radio InterOpt Foundation
+  </mat-card>
+</div>

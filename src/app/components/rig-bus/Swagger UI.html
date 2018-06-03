@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Put -->
+<html class="gr__localhost"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Swagger UI</title>
+  <link rel="icon" type="image/png" href="http://localhost:7301/swagger/ui/images/favicon-32x32-png" sizes="32x32">
+  <link rel="icon" type="image/png" href="http://localhost:7301/swagger/ui/images/favicon-16x16-png" sizes="16x16">
+  <link href="./Swagger UI_files/typography-css" media="screen" rel="stylesheet" type="text/css">
+  <link href="./Swagger UI_files/reset-css" media="screen" rel="stylesheet" type="text/css">
+  <link href="./Swagger UI_files/screen-css" media="screen" rel="stylesheet" type="text/css">
+  <link href="./Swagger UI_files/reset-css" media="print" rel="stylesheet" type="text/css">
+  <link href="./Swagger UI_files/print-css" media="print" rel="stylesheet" type="text/css">
+  
+
+  <script src="./Swagger UI_files/object-assign-pollyfill-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/jquery-1-8-0-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/jquery-slideto-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/jquery-wiggle-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/jquery-ba-bbq-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/handlebars-4-0-5-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/lodash-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/backbone-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/swagger-ui-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/highlight-9-1-0-pack-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/highlight-9-1-0-pack_extended-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/jsoneditor-min-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/marked-js" type="text/javascript"></script>
+  <script src="./Swagger UI_files/swagger-oauth-js" type="text/javascript"></script>
+
+  <!-- Some basic translations -->
+  <!-- <script src='lang/translator.js' type='text/javascript'></script> -->
+  <!-- <script src='lang/ru.js' type='text/javascript'></script> -->
+  <!-- <script src='lang/en.js' type='text/javascript'></script> -->
+
+  <script type="text/javascript">
+    $(function () {
+
+      // Get Swashbuckle config into JavaScript
+      function arrayFrom(configString) {
+        return (configString !== "") ? configString.split('|') : [];
+      }
+
+      function stringOrNullFrom(configString) {
+        return (configString !== "null") ? configString : null;
+      }
+
+      window.swashbuckleConfig = {
+        rootUrl: 'http://localhost:7301',
+        discoveryPaths: arrayFrom('swagger/docs/v1'),
+        booleanValues: arrayFrom('true|false'),
+        validatorUrl: stringOrNullFrom(''),
+        customScripts: arrayFrom(''),
+        docExpansion: 'none',
+        supportedSubmitMethods: arrayFrom('get|put|post|delete|options|head|patch'),
+        oAuth2Enabled: ('false' == 'true'),
+        oAuth2ClientId: '',
+        oAuth2ClientSecret: '',
+        oAuth2Realm: '',
+        oAuth2AppName: '',
+        oAuth2ScopeSeperator: ' ',
+        oAuth2AdditionalQueryStringParams: JSON.parse('{}'),
+        apiKeyName: 'api_key',
+        apiKeyIn: 'query'
+      };
+
+      hljs.configure({
+        highlightSizeThreshold: 5000
+      });
+
+      // Pre load translate...
+      if(window.SwaggerTranslator) {
+        window.SwaggerTranslator.translate();
+      }
+      window.swaggerUi = new SwaggerUi({
+        url: swashbuckleConfig.rootUrl + "/" + swashbuckleConfig.discoveryPaths[0],
+        dom_id: "swagger-ui-container",
+        booleanValues: swashbuckleConfig.booleanValues,
+        supportedSubmitMethods: swashbuckleConfig.supportedSubmitMethods,
+        onComplete: function(swaggerApi, swaggerUi){
+          if (typeof initOAuth == "function" && swashbuckleConfig.oAuth2Enabled) {
+            initOAuth({
+              clientId: swashbuckleConfig.oAuth2ClientId,
+              clientSecret: swashbuckleConfig.oAuth2ClientSecret,
+              realm: swashbuckleConfig.oAuth2Realm,
+              appName: swashbuckleConfig.oAuth2AppName,
+              scopeSeparator: swashbuckleConfig.oAuth2ScopeSeperator,
+              additionalQueryStringParams: swashbuckleConfig.oAuth2AdditionalQueryStringParams
+            });
+          }
+
+          if(window.SwaggerTranslator) {
+            window.SwaggerTranslator.translate();
+          }
+
+          addApiKeyAuthorization();
+
+          window.swaggerApi = swaggerApi;
+          _.each(swashbuckleConfig.customScripts, function (script) {
+            $.getScript(script);
+          });
+        },
+        onFailure: function(data) {
+          log("Unable to Load SwaggerUI");
+        },
+        docExpansion: swashbuckleConfig.docExpansion,
+        jsonEditor: false,
+        apisSorter: null, // default to server
+        defaultModelRendering: 'schema',
+        showRequestHeaders: false,
+        oauth2RedirectUrl: window.location.href.replace('index', 'o2c-html').split('#')[0]
+      });
+
+      if (window.swashbuckleConfig.validatorUrl !== '')
+        window.swaggerUi.options.validatorUrl = window.swashbuckleConfig.validatorUrl;
+
+      function addApiKeyAuthorization() {
+        var key = $('#input_apiKey')[0].value;
+        if (key && key.trim() != "") {
+          if (swashbuckleConfig.apiKeyIn === "query") {
+              key = encodeURIComponent(key);
+          }
+          var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(swashbuckleConfig.apiKeyName, key, swashbuckleConfig.apiKeyIn);
+          window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
+          log("added key " + key);
+        }
+      }
+      $('#input_apiKey').change(addApiKeyAuthorization);
+
+      window.swaggerUi.load();
+
+      function log() {
+        if ('console' in window) {
+          console.log.apply(console, arguments);
+        }
+      }
+  });
+  </script>
+</head>
+
+<div class="gr-top-z-index gr-top-zero" tabindex="-1"><div class="_30JeG" style="transform: translate(339.954px, 1843.14px);"><div class="_2A3ER"><div class="_1y1wn _2R8DE undefined"></div><div class="_24Em3"><div style="display: initial;"><div class="_21QaI _1L80j" tabindex="-1"></div></div></div><div class="_2-7o4"></div><div class="_24Em3"><div style="display: initial;"><div class="_21QaI _1pbTT" data-action="editor" tabindex="-1"></div></div></div></div></div></div><div style="visibility: hidden; top: -9999px; position: absolute; opacity: 0;"><div class="_30JeG" style="transform: translate(408.954px, 1858.14px);"><div class="_2A3ER"><div class="_1y1wn _2R8DE undefined"></div><div class="_24Em3"><div style="display: initial;"><div class="_21QaI _1L80j" tabindex="-1"></div></div></div><div class="_2-7o4"></div><div class="_24Em3"><div style="display: initial;"><div class="_21QaI _1pbTT" data-action="editor" tabindex="-1"></div></div></div></div></div></div><div style="visibility: hidden; top: -9999px; position: absolute; opacity: 0;"></div><body class="swagger-section" data-gr-c-s-loaded="true">
+<div id="header">
+  <div class="swagger-ui-wrap">
+    <a id="logo" href="http://swagger.io/"><img class="logo__img" alt="swagger" height="30" width="30" src="./Swagger UI_files/logo_small-png"><span class="logo__title">swagger</span></a>
+    <form id="api_selector">
+      <div class="input"><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"></div>
+      <div class="input"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"></div>
+      <div class="input"><a id="explore" class="header__btn" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Explore</a></div>
+    </form>
+  </div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap message-success" data-sw-translate=""></div>
+<div id="swagger-ui-container" class="swagger-ui-wrap"><div class="info" id="api_info">
+  <div class="info_title">A title for your API</div>
+  <div class="info_description markdown"></div>
+  
+  
+  
+  
+  
+</div>
+<div class="container" id="resources_container">
+  <div class="authorize-wrapper"></div>
+
+  <ul id="resources"><li id="resource_OmniRig" class="resource active"><div class="heading">
+  <h2>
+    <a href="http://localhost:7301/swagger/ui/index#!/OmniRig" class="toggleEndpointList" data-id="OmniRig">OmniRig</a> 
+  </h2>
+  <ul class="options">
+    <li>
+      <a href="http://localhost:7301/swagger/ui/index#!/OmniRig" id="endpointListTogger_OmniRig" class="toggleEndpointList" data-id="OmniRig" data-sw-translate="">Show/Hide</a>
+    </li>
+    <li>
+      <a href="http://localhost:7301/swagger/ui/index#" class="collapseResource" data-id="OmniRig" data-sw-translate="">
+        List Operations
+      </a>
+    </li>
+    <li>
+      <a href="http://localhost:7301/swagger/ui/index#" class="expandResource" data-id="OmniRig" data-sw-translate="">
+        Expand Operations
+      </a>
+    </li>
+  </ul>
+</div>
+<ul class="endpoints" id="OmniRig_endpoint_list" style="">
+
+<li class="endpoint">  <ul class="operations">
+    <li class="get operation" id="OmniRig_OmniRig_Get">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Get" class="toggleOperation">get</a>
+          </span>
+          <span class="path">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Get" class="toggleOperation ">/api/RigBus/V1/RigsInfo</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Get" class="toggleOperation"><span class="markdown"></span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" id="OmniRig_OmniRig_Get_content" style="display: block;">
+          <div class="response-class">
+            <h4><span data-sw-translate="">Response Class</span> (<span data-sw-translate="">Status</span> 200)</h4>
+              <div class="markdown"><p>OK</p>
+</div>
+            <p><span class="model-signature"><div>
+<div>
+<ul class="signature-nav">
+  <li><a class="description-link" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Model</a></li>
+  <li><a class="snippet-link selected" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Example Value</a></li>
+</ul>
+<div>
+
+<div class="signature-container">
+  <div class="description" style="display: none;">
+      <span class="strong">Rigs {</span><div class="readOnly"><span class="propName ">RigList</span> (<span class="propType">Array[RigState]</span>, <span class="propOptKey">optional</span>, <span class="propReadOnly">read only</span>)</div><span class="strong">}</span><br><span class="strong">RigState {</span><div><span class="propName ">Freq</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">FreqA</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">FreqB</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Mode</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Pitch</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">RigType</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Rit</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">RitOffset</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Status</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">StatusStr</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Split</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Tx</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Vfo</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Xit</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span>
+  </div>
+
+  <div class="snippet" style="display: block;">
+      <div class="snippet_json" style="display: block;">
+        <pre><code>{
+  "RigList": [
+    {
+      "Freq": 0,
+      "FreqA": 0,
+      "FreqB": 0,
+      "Mode": "string",
+      "Pitch": 0,
+      "RigType": "string",
+      "Rit": "string",
+      "RitOffset": 0,
+      "Status": "string",
+      "StatusStr": "string",
+      "Split": "string",
+      "Tx": "string",
+      "Vfo": "string",
+      "Xit": "string"
+    }
+  ]
+}</code></pre>
+        
+      </div>
+    <div class="snippet_xml" style="display: none;">
+      <pre><code>&lt;?xml version="1.0"?&gt;
+&lt;Rigs&gt;
+  &lt;RigList&gt;
+    &lt;Freq&gt;1&lt;/Freq&gt;
+    &lt;FreqA&gt;1&lt;/FreqA&gt;
+    &lt;FreqB&gt;1&lt;/FreqB&gt;
+    &lt;Mode&gt;string&lt;/Mode&gt;
+    &lt;Pitch&gt;1&lt;/Pitch&gt;
+    &lt;RigType&gt;string&lt;/RigType&gt;
+    &lt;Rit&gt;string&lt;/Rit&gt;
+    &lt;RitOffset&gt;1&lt;/RitOffset&gt;
+    &lt;Status&gt;string&lt;/Status&gt;
+    &lt;StatusStr&gt;string&lt;/StatusStr&gt;
+    &lt;Split&gt;string&lt;/Split&gt;
+    &lt;Tx&gt;string&lt;/Tx&gt;
+    &lt;Vfo&gt;string&lt;/Vfo&gt;
+    &lt;Xit&gt;string&lt;/Xit&gt;
+  &lt;/RigList&gt;
+&lt;/Rigs&gt;
+</code></pre>
+      
+    </div>
+  </div>
+</div>
+</div></div></div></span></p>
+            <br>
+            <div class="response-content-type"><div><label data-sw-translate="" for="rct0.9730444870797665">Response Content Type</label>
+<select name="responseContentType" id="rct0.9730444870797665">
+  <option value="application/json">application/json</option>
+  <option value="text/json">text/json</option>
+  <option value="application/xml">application/xml</option>
+  <option value="text/xml">text/xml</option>
+</select>
+</div></div>
+            </div>
+
+
+        <form accept-charset="UTF-8" class="sandbox">
+          <div style="margin:0;padding:0;display:inline"></div>
+          <div class="sandbox_header">
+            <input class="submit" type="submit" value="Try it out!" data-sw-translate="">
+            <a href="http://localhost:7301/swagger/ui/index#" class="response_hider" style="display:none" data-sw-translate="">Hide Response</a>
+            <span class="response_throbber" style="display:none"></span>
+          </div>
+        </form>
+        <div class="response" style="display:none">
+          <h4 class="curl">Curl</h4>
+          <div class="block curl"></div>
+          <h4 data-sw-translate="">Request URL</h4>
+          <div class="block request_url"></div>
+          <h4 data-sw-translate="">Response Body</h4>
+          <div class="block response_body"></div>
+          <h4 data-sw-translate="">Response Code</h4>
+          <div class="block response_code"></div>
+          <h4 data-sw-translate="">Response Headers</h4>
+          <div class="block response_headers"></div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</li><li class="endpoint">  <ul class="operations">
+    <li class="get operation" id="OmniRig_OmniRig_Get_0">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Get_0" class="toggleOperation">get</a>
+          </span>
+          <span class="path">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Get_0" class="toggleOperation ">/api/RigBus/V1/RigsInfo/{id}</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Get_0" class="toggleOperation"><span class="markdown"></span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" id="OmniRig_OmniRig_Get_0_content" style="display: block;">
+          <div class="response-class">
+            <h4><span data-sw-translate="">Response Class</span> (<span data-sw-translate="">Status</span> 200)</h4>
+              <div class="markdown"><p>OK</p>
+</div>
+            <p><span class="model-signature"><div>
+<div>
+<ul class="signature-nav">
+  <li><a class="description-link" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Model</a></li>
+  <li><a class="snippet-link selected" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Example Value</a></li>
+</ul>
+<div>
+
+<div class="signature-container">
+  <div class="description" style="display: none;">
+      <span class="strong">RigState {</span><div><span class="propName ">Freq</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">FreqA</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">FreqB</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Mode</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Pitch</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">RigType</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Rit</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">RitOffset</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Status</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">StatusStr</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Split</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Tx</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Vfo</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Xit</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span>
+  </div>
+
+  <div class="snippet" style="display: block;">
+      <div class="snippet_json" style="display: block;">
+        <pre><code>{
+  "Freq": 0,
+  "FreqA": 0,
+  "FreqB": 0,
+  "Mode": "string",
+  "Pitch": 0,
+  "RigType": "string",
+  "Rit": "string",
+  "RitOffset": 0,
+  "Status": "string",
+  "StatusStr": "string",
+  "Split": "string",
+  "Tx": "string",
+  "Vfo": "string",
+  "Xit": "string"
+}</code></pre>
+        
+      </div>
+    <div class="snippet_xml" style="display: none;">
+      <pre><code>&lt;?xml version="1.0"?&gt;
+&lt;RigState&gt;
+  &lt;Freq&gt;1&lt;/Freq&gt;
+  &lt;FreqA&gt;1&lt;/FreqA&gt;
+  &lt;FreqB&gt;1&lt;/FreqB&gt;
+  &lt;Mode&gt;string&lt;/Mode&gt;
+  &lt;Pitch&gt;1&lt;/Pitch&gt;
+  &lt;RigType&gt;string&lt;/RigType&gt;
+  &lt;Rit&gt;string&lt;/Rit&gt;
+  &lt;RitOffset&gt;1&lt;/RitOffset&gt;
+  &lt;Status&gt;string&lt;/Status&gt;
+  &lt;StatusStr&gt;string&lt;/StatusStr&gt;
+  &lt;Split&gt;string&lt;/Split&gt;
+  &lt;Tx&gt;string&lt;/Tx&gt;
+  &lt;Vfo&gt;string&lt;/Vfo&gt;
+  &lt;Xit&gt;string&lt;/Xit&gt;
+&lt;/RigState&gt;
+</code></pre>
+      
+    </div>
+  </div>
+</div>
+</div></div></div></span></p>
+            <br>
+            <div class="response-content-type"><div><label data-sw-translate="" for="rct0.02271993424191887">Response Content Type</label>
+<select name="responseContentType" id="rct0.02271993424191887">
+  <option value="application/json">application/json</option>
+  <option value="text/json">text/json</option>
+  <option value="application/xml">application/xml</option>
+  <option value="text/xml">text/xml</option>
+</select>
+</div></div>
+            </div>
+
+
+        <form accept-charset="UTF-8" class="sandbox">
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Parameters</h4>
+          <table class="fullwidth parameters">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">Value</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">Description</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter Type</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">Data Type</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code required"><label for="mid0.7499745246404264">id</label></td>
+<td>
+<input class="parameter required" minlength="1" name="id" placeholder="(required)" id="mid0.7499745246404264" type="text" value=""></td>
+<td>
+	<strong><span class="markdown"></span></strong>
+</td>
+<td>path</td>
+<td><span class="model-signature">integer</span></td>
+</tr></tbody>
+          </table>
+          <div class="sandbox_header">
+            <input class="submit" type="submit" value="Try it out!" data-sw-translate="">
+            <a href="http://localhost:7301/swagger/ui/index#" class="response_hider" style="display:none" data-sw-translate="">Hide Response</a>
+            <span class="response_throbber" style="display:none"></span>
+          </div>
+        </form>
+        <div class="response" style="display:none">
+          <h4 class="curl">Curl</h4>
+          <div class="block curl"></div>
+          <h4 data-sw-translate="">Request URL</h4>
+          <div class="block request_url"></div>
+          <h4 data-sw-translate="">Response Body</h4>
+          <div class="block response_body"></div>
+          <h4 data-sw-translate="">Response Code</h4>
+          <div class="block response_code"></div>
+          <h4 data-sw-translate="">Response Headers</h4>
+          <div class="block response_headers"></div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</li><li class="endpoint">  <ul class="operations">
+    <li class="put operation" id="OmniRig_OmniRig_PutFreq">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_PutFreq" class="toggleOperation">put</a>
+          </span>
+          <span class="path">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_PutFreq" class="toggleOperation ">/api/RigBus/V1/freq</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_PutFreq" class="toggleOperation"><span class="markdown"></span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" id="OmniRig_OmniRig_PutFreq_content" style="">
+
+
+        <form accept-charset="UTF-8" class="sandbox">
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Parameters</h4>
+          <table class="fullwidth parameters">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">Value</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">Description</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter Type</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">Data Type</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code required"><label for="mvalue0.775463179560399">value</label></td>
+<td>
+				<textarea class="body-textarea required" placeholder="(required)" name="value" id="mvalue0.775463179560399"></textarea>
+				<div class="editor_holder"></div>
+				<br>
+				<div class="parameter-content-type"><div><label for="pct0.6429438317093257" data-sw-translate="">Parameter content type:</label>
+<select name="parameterContentType" id="pct0.6429438317093257">
+  <option value="application/json">application/json</option>
+  <option value="text/json">text/json</option>
+  <option value="application/xml">application/xml</option>
+  <option value="text/xml">text/xml</option>
+  <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+</select>
+</div></div>
+</td>
+<td>
+	<strong><span class="markdown"></span></strong>
+</td>
+<td>body</td>
+<td><span class="model-signature"><div>
+<div>
+<ul class="signature-nav">
+  <li><a class="description-link" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Model</a></li>
+  <li><a class="snippet-link selected" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Example Value</a></li>
+</ul>
+<div>
+
+<div class="signature-container">
+  <div class="description" style="display: none;">
+      <span class="strong">Freq {</span><div><span class="propName ">rigId</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">freq</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span>
+  </div>
+
+  <div class="snippet" style="display: block;">
+      <div class="snippet_json" style="display: block;">
+        <pre><code>{
+  "rigId": 0,
+  "freq": 0
+}</code></pre>
+        <small class="notice" data-sw-translate=""></small>
+      </div>
+    <div class="snippet_xml" style="display: none;">
+      <pre><code>&lt;?xml version="1.0"?&gt;
+&lt;Freq&gt;
+  &lt;rigId&gt;1&lt;/rigId&gt;
+  &lt;freq&gt;1&lt;/freq&gt;
+&lt;/Freq&gt;
+</code></pre>
+      <small class="notice" data-sw-translate=""></small>
+    </div>
+  </div>
+</div>
+</div></div></div></span></td>
+</tr></tbody>
+          </table>
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Response Messages</h4>
+          <table class="fullwidth response-messages">
+            <thead>
+            <tr>
+              <th data-sw-translate="">HTTP Status Code</th>
+              <th data-sw-translate="">Reason</th>
+              <th data-sw-translate="">Response Model</th>
+              <th data-sw-translate="">Headers</th>
+            </tr>
+            </thead>
+            <tbody class="operation-status">
+            <tr><td width="15%" class="code">204</td>
+<td class="markdown"><p>No Content</p>
+</td>
+<td width="50%"><span class="model-signature"><div>    
+</div></span></td>
+<td class="headers">
+  <table>
+    <tbody>
+    </tbody>
+  </table>
+</td></tr></tbody>
+          </table>
+          <div class="sandbox_header">
+            <input class="submit" type="submit" value="Try it out!" data-sw-translate="">
+            <a href="http://localhost:7301/swagger/ui/index#" class="response_hider" style="display:none" data-sw-translate="">Hide Response</a>
+            <span class="response_throbber" style="display:none"></span>
+          </div>
+        </form>
+        <div class="response" style="display:none">
+          <h4 class="curl">Curl</h4>
+          <div class="block curl"></div>
+          <h4 data-sw-translate="">Request URL</h4>
+          <div class="block request_url"></div>
+          <h4 data-sw-translate="">Response Body</h4>
+          <div class="block response_body"></div>
+          <h4 data-sw-translate="">Response Code</h4>
+          <div class="block response_code"></div>
+          <h4 data-sw-translate="">Response Headers</h4>
+          <div class="block response_headers"></div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</li><li class="endpoint">  <ul class="operations">
+    <li class="put operation" id="OmniRig_OmniRig_PutMode">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_PutMode" class="toggleOperation">put</a>
+          </span>
+          <span class="path">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_PutMode" class="toggleOperation ">/api/RigBus/V1/mode</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_PutMode" class="toggleOperation"><span class="markdown"></span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" id="OmniRig_OmniRig_PutMode_content" style="">
+
+
+        <form accept-charset="UTF-8" class="sandbox">
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Parameters</h4>
+          <table class="fullwidth parameters">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">Value</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">Description</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter Type</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">Data Type</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code required"><label for="mvalue0.6863453140382769">value</label></td>
+<td>
+				<grammarly-ghost spellcheck="false"><div data-id="d339d474-4329-f382-3fb2-46941ffebc3b" data-gramm_id="d339d474-4329-f382-3fb2-46941ffebc3b" data-gramm="gramm" data-gramm_editor="true" class="gr_ver_2" gramm="true" contenteditable="true" style="position: absolute; color: transparent; overflow: hidden; white-space: pre-wrap; border-radius: 0px; box-sizing: content-box; height: 105.966px; width: 300px; margin: 1771px 0px 0px 106px; padding: 2px; z-index: 0; border-width: 0.994318px; border-style: solid; top: 0px; left: 0px; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(242, 222, 222);" width="305.96588134765625"><span style="display: inline-block; line-height: normal; color: transparent; overflow: hidden; text-align: left; float: initial; clear: none; box-sizing: border-box; vertical-align: baseline; white-space: pre-wrap; width: 100%; margin: 0px; padding: 0px; border: 0px; font-style: normal; font-variant: normal; font-weight: 700; font-stretch: normal; font-size: 13.3333px; font-family: monospace; letter-spacing: normal; text-shadow: none; height: 104px;"></span><br></div></grammarly-ghost><textarea class="body-textarea required error" placeholder="(required)" name="value" id="mvalue0.6863453140382769" data-gramm="true" data-txt_gramm_id="d339d474-4329-f382-3fb2-46941ffebc3b" data-gramm_id="d339d474-4329-f382-3fb2-46941ffebc3b" spellcheck="false" data-gramm_editor="true" style="left: 0px; z-index: auto; position: relative; line-height: normal; font-size: 13.3333px; transition: none; background: transparent !important;"></textarea><grammarly-btn><div class="_1BN1N Kzi1t _2DJZN" style="z-index: 2; transform: translate(382.955px, 1847.14px);"><div class="_1HjH7"><div title="Protected by Grammarly" class="_3qe6h">&nbsp;</div></div></div></grammarly-btn>
+				<div class="editor_holder"></div>
+				<br>
+				<div class="parameter-content-type"><div><label for="pct0.27162034900037635" data-sw-translate="">Parameter content type:</label>
+<select name="parameterContentType" id="pct0.27162034900037635">
+  <option value="application/json">application/json</option>
+  <option value="text/json">text/json</option>
+  <option value="application/xml">application/xml</option>
+  <option value="text/xml">text/xml</option>
+  <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+</select>
+</div></div>
+</td>
+<td>
+	<strong><span class="markdown"></span></strong>
+</td>
+<td>body</td>
+<td><span class="model-signature"><div>
+<div>
+<ul class="signature-nav">
+  <li><a class="description-link" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Model</a></li>
+  <li><a class="snippet-link selected" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Example Value</a></li>
+</ul>
+<div>
+
+<div class="signature-container">
+  <div class="description" style="display: none;">
+      <span class="strong">Mode {</span><div><span class="propName ">rigId</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">mode</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span>
+  </div>
+
+  <div class="snippet" style="display: block;">
+      <div class="snippet_json" style="display: block;">
+        <pre><code>{
+  "rigId": 0,
+  "mode": "string"
+}</code></pre>
+        <small class="notice" data-sw-translate=""></small>
+      </div>
+    <div class="snippet_xml" style="display: none;">
+      <pre><code>&lt;?xml version="1.0"?&gt;
+&lt;Mode&gt;
+  &lt;rigId&gt;1&lt;/rigId&gt;
+  &lt;mode&gt;string&lt;/mode&gt;
+&lt;/Mode&gt;
+</code></pre>
+      <small class="notice" data-sw-translate=""></small>
+    </div>
+  </div>
+</div>
+</div></div></div></span></td>
+</tr></tbody>
+          </table>
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Response Messages</h4>
+          <table class="fullwidth response-messages">
+            <thead>
+            <tr>
+              <th data-sw-translate="">HTTP Status Code</th>
+              <th data-sw-translate="">Reason</th>
+              <th data-sw-translate="">Response Model</th>
+              <th data-sw-translate="">Headers</th>
+            </tr>
+            </thead>
+            <tbody class="operation-status">
+            <tr><td width="15%" class="code">204</td>
+<td class="markdown"><p>No Content</p>
+</td>
+<td width="50%"><span class="model-signature"><div>    
+</div></span></td>
+<td class="headers">
+  <table>
+    <tbody>
+    </tbody>
+  </table>
+</td></tr></tbody>
+          </table>
+          <div class="sandbox_header">
+            <input class="submit" type="submit" value="Try it out!" data-sw-translate="">
+            <a href="http://localhost:7301/swagger/ui/index#" class="response_hider" style="display:none" data-sw-translate="">Hide Response</a>
+            <span class="response_throbber" style="display:none"></span>
+          </div>
+        </form>
+        <div class="response" style="display:none">
+          <h4 class="curl">Curl</h4>
+          <div class="block curl"></div>
+          <h4 data-sw-translate="">Request URL</h4>
+          <div class="block request_url"></div>
+          <h4 data-sw-translate="">Response Body</h4>
+          <div class="block response_body"></div>
+          <h4 data-sw-translate="">Response Code</h4>
+          <div class="block response_code"></div>
+          <h4 data-sw-translate="">Response Headers</h4>
+          <div class="block response_headers"></div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</li><li class="endpoint">  <ul class="operations">
+    <li class="put operation" id="OmniRig_OmniRig_Put">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Put" class="toggleOperation">put</a>
+          </span>
+          <span class="path">
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Put" class="toggleOperation ">/api/RigBus/V1/setRig/{id}</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="http://localhost:7301/swagger/ui/index#!/OmniRig/OmniRig_Put" class="toggleOperation"><span class="markdown"></span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" id="OmniRig_OmniRig_Put_content" style="display: block;">
+
+
+        <form accept-charset="UTF-8" class="sandbox">
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Parameters</h4>
+          <table class="fullwidth parameters">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">Value</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">Description</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">Parameter Type</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">Data Type</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code required"><label for="mid0.5537104982695704">id</label></td>
+<td>
+<input class="parameter required" minlength="1" name="id" placeholder="(required)" id="mid0.5537104982695704" type="text" value=""></td>
+<td>
+	<strong><span class="markdown"></span></strong>
+</td>
+<td>path</td>
+<td><span class="model-signature">integer</span></td>
+</tr><tr><td class="code required"><label for="mvalue0.2584544533314077">value</label></td>
+<td>
+				<textarea class="body-textarea required" placeholder="(required)" name="value" id="mvalue0.2584544533314077"></textarea>
+				<div class="editor_holder"></div>
+				<br>
+				<div class="parameter-content-type"><div><label for="pct0.8718822294574027" data-sw-translate="">Parameter content type:</label>
+<select name="parameterContentType" id="pct0.8718822294574027">
+  <option value="application/json">application/json</option>
+  <option value="text/json">text/json</option>
+  <option value="application/xml">application/xml</option>
+  <option value="text/xml">text/xml</option>
+  <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+</select>
+</div></div>
+</td>
+<td>
+	<strong><span class="markdown"></span></strong>
+</td>
+<td>body</td>
+<td><span class="model-signature"><div>
+<div>
+<ul class="signature-nav">
+  <li><a class="description-link" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Model</a></li>
+  <li><a class="snippet-link selected" href="http://localhost:7301/swagger/ui/index#" data-sw-translate="">Example Value</a></li>
+</ul>
+<div>
+
+<div class="signature-container">
+  <div class="description" style="display: none;">
+      <span class="strong">RigState {</span><div><span class="propName ">Freq</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">FreqA</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">FreqB</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Mode</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Pitch</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">RigType</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Rit</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">RitOffset</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Status</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">StatusStr</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Split</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Tx</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Vfo</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">Xit</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span>
+  </div>
+
+  <div class="snippet" style="display: block;">
+      <div class="snippet_json" style="display: block;">
+        <pre><code>{
+  "Freq": 0,
+  "FreqA": 0,
+  "FreqB": 0,
+  "Mode": "string",
+  "Pitch": 0,
+  "RigType": "string",
+  "Rit": "string",
+  "RitOffset": 0,
+  "Status": "string",
+  "StatusStr": "string",
+  "Split": "string",
+  "Tx": "string",
+  "Vfo": "string",
+  "Xit": "string"
+}</code></pre>
+        <small class="notice" data-sw-translate=""></small>
+      </div>
+    <div class="snippet_xml" style="display: none;">
+      <pre><code>&lt;?xml version="1.0"?&gt;
+&lt;RigState&gt;
+  &lt;Freq&gt;1&lt;/Freq&gt;
+  &lt;FreqA&gt;1&lt;/FreqA&gt;
+  &lt;FreqB&gt;1&lt;/FreqB&gt;
+  &lt;Mode&gt;string&lt;/Mode&gt;
+  &lt;Pitch&gt;1&lt;/Pitch&gt;
+  &lt;RigType&gt;string&lt;/RigType&gt;
+  &lt;Rit&gt;string&lt;/Rit&gt;
+  &lt;RitOffset&gt;1&lt;/RitOffset&gt;
+  &lt;Status&gt;string&lt;/Status&gt;
+  &lt;StatusStr&gt;string&lt;/StatusStr&gt;
+  &lt;Split&gt;string&lt;/Split&gt;
+  &lt;Tx&gt;string&lt;/Tx&gt;
+  &lt;Vfo&gt;string&lt;/Vfo&gt;
+  &lt;Xit&gt;string&lt;/Xit&gt;
+&lt;/RigState&gt;
+</code></pre>
+      <small class="notice" data-sw-translate=""></small>
+    </div>
+  </div>
+</div>
+</div></div></div></span></td>
+</tr></tbody>
+          </table>
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">Response Messages</h4>
+          <table class="fullwidth response-messages">
+            <thead>
+            <tr>
+              <th data-sw-translate="">HTTP Status Code</th>
+              <th data-sw-translate="">Reason</th>
+              <th data-sw-translate="">Response Model</th>
+              <th data-sw-translate="">Headers</th>
+            </tr>
+            </thead>
+            <tbody class="operation-status">
+            <tr><td width="15%" class="code">204</td>
+<td class="markdown"><p>No Content</p>
+</td>
+<td width="50%"><span class="model-signature"><div>    
+</div></span></td>
+<td class="headers">
+  <table>
+    <tbody>
+    </tbody>
+  </table>
+</td></tr></tbody>
+          </table>
+          <div class="sandbox_header">
+            <input class="submit" type="submit" value="Try it out!" data-sw-translate="">
+            <a href="http://localhost:7301/swagger/ui/index#" class="response_hider" style="display:none" data-sw-translate="">Hide Response</a>
+            <span class="response_throbber" style="display:none"></span>
+          </div>
+        </form>
+        <div class="response" style="display:none">
+          <h4 class="curl">Curl</h4>
+          <div class="block curl"></div>
+          <h4 data-sw-translate="">Request URL</h4>
+          <div class="block request_url"></div>
+          <h4 data-sw-translate="">Response Body</h4>
+          <div class="block response_body"></div>
+          <h4 data-sw-translate="">Response Code</h4>
+          <div class="block response_code"></div>
+          <h4 data-sw-translate="">Response Headers</h4>
+          <div class="block response_headers"></div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</li></ul>
+</li></ul>
+
+  <div class="footer">
+    <h4 style="color: #999">[ <span style="font-variant: small-caps">base url</span>: 
+  , <span style="font-variant: small-caps" data-sw-translate="">api version</span>: v1
+    ]
+    </h4>
+    </div>
+</div>
+</div>
+
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span><div><div class="gr_-editor gr-iframe-first-load" style="display: none;"><div class="gr_-editor_back"></div><iframe class="gr_-ifr gr-_dialog-content" src="./Swagger UI_files/saved_resource.html"></iframe></div></div><grammarly-card><div></div></grammarly-card></html>

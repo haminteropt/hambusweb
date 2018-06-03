@@ -12,12 +12,20 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { appRoutes } from './app.routes';
 import { RigBusComponent } from './components/rig-bus/rig-bus.component';
+import { NewsComponent } from './components/news/news.component';
+import { JoinComponent } from './components/join/join.component';
+import { SwaggerComponent } from './components/swagger/swagger.component';
+import { BusStandardsComponent } from './components/busstandards/busstandards.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RigBusComponent
+    RigBusComponent,
+    NewsComponent,
+    JoinComponent,
+    SwaggerComponent,
+    BusStandardsComponent
   ],
   imports: [
     BrowserModule,
