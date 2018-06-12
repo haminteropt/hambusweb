@@ -1,39 +1,40 @@
 <h1>
   HamBus Standards</h1>
 <p>
-  In order for Amateur software and hardware to inter-operate with each other, there must be a set of standard protocols and
+  In order for Amateur software and hardware to interoperate with each other, there must be a set of standard protocols and
   formats.
 </p>
-<p> Each Bus will have it own standards (it wouldn't make sense for the RigBus to have the same communication contract as a LogBus).
+<p> Each Bus will have it own standard (it wouldn't make sense for the RigBus 
+  to have the same communication contract as a LogBus).
   However an OmniRig RigBus would have the same protocol contract as Hamlib RigBus. </p>
 
 <h2>Protocol</h2>
 <p> All Buses will be a ReST WebAPI server. It may also use other protocols behind the scenes when it makes sense to do so. For
-  example a Bus could broadcast an UDP datagram announcing that they are running and willing to accept request on a given
+  example a Bus could broadcast a UDP datagram announcing that they are running and willing to accept request on a given
   port/protocol.
 </p>
 <p>In the ReST actions, there will be required, optional, and extension properties. A required property may have a reasonable
-  default. For example a RigBus may only support a single radio, however rig Id maybe required property, it would be OK for
-  the RigBus to accept either no rig id or ignore the value. Extension properties are properties that is outside the standard
+  default. For example, a RigBus may only support a single radio, however rig Id maybe required property, it would be OK for
+  the RigBus to accept either no rig id or ignore the value. Extension properties are properties that are outside the standard
   Bus properties. These properties cannot be required and the Bus must function correctly without the client knowing about
-  them. For example the SDRPlay has a bandwidth settings that allows the user to narrow or enable the visible bandwidth.
+  them. For example the SDRPlay has a bandwidth setting that allows the user to narrow or enable the visible bandwidth.
   Buses should also ignore any non-standard properties that it might receive gracefully.
 </p>
 <h3>Swagger</h3>
 <p>
   <a href="https://swagger.io">Swagger</a>
-  is a ReST API documentation tool. It is open source available just about every known language such as C#/VB, Ruby, C++, Delphi,
+  is a ReST API documentation tool. It is open source framework available just about every known language such as C#/VB, Ruby, C++, Delphi,
   Java, NodeJS, etc. If at all possible, all Buses should provide a Swagger endpoint. If for some reason using swagger isn't
   possible, then there should be still have the Bus API at the /swagger endpoint.</p>
 
 <h3>Version</h3>
 <p>
-  Buses much support versions. Details are still be worked out. The goal is to allow old client software continue to function
-  correct even if the Bus has been upgraded or the client software has been upgraded but the Bus is an older version.
+  Buses much support versions. Details are still to be worked out. The goal is to allow old client software continue to function
+  correctly even if the Bus has been upgraded or the client software has been upgraded but the Bus is an older version.
 </p>
 <h3>Portability</h3>
 <p>
   Portability is really the hallmark of the HamBus. Buses should be written in OS and Processor independent. As with most things,
-  this might not make sense. For example a RigBus for Flex PowerSDR could work solely on Windows, because PowerSDR only works
-  on Windows. Like wise OmniRig RigBus also only works on Windows, so it doesn't make sense to have a Mac port.
+  this might not make sense. For example, a RigBus for Flex PowerSDR could work solely on Windows, because PowerSDR only works
+  on Windows. Likewise OmniRig RigBus also only works on Windows, so it doesn't make sense to have a Mac port.
 </p>
