@@ -16,6 +16,7 @@ import { NewsComponent } from './components/news/news.component';
 import { JoinComponent } from './components/join/join.component';
 import { SwaggerComponent } from './components/swagger/swagger.component';
 import { BusStandardsComponent } from './components/busstandards/busstandards.component';
+import { GithubComponent } from './components/github/github.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { BusStandardsComponent } from './components/busstandards/busstandards.co
     NewsComponent,
     JoinComponent,
     SwaggerComponent,
-    BusStandardsComponent
+    BusStandardsComponent,
+    GithubComponent
   ],
   imports: [
     BrowserModule,

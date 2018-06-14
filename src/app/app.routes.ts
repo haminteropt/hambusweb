@@ -4,6 +4,7 @@ import { RigBusComponent } from './components/rig-bus/rig-bus.component';
 import { JoinComponent } from './components/join/join.component';
 import { SwaggerComponent } from './components/swagger/swagger.component';
 import { BusStandardsComponent } from './components/busstandards/busstandards.component';
+import { GithubComponent } from './components/github/github.component';
 export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   {
@@ -17,6 +18,10 @@ export const appRoutes: Routes = [
   {
     path: 'join',
     component: JoinComponent
+  },
+  {
+    path: 'github',
+    component: GithubComponent
   },
   {
     path: 'swagger',
